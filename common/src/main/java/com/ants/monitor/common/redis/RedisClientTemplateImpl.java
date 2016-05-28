@@ -2,6 +2,9 @@ package com.ants.monitor.common.redis;
 
 import com.ants.monitor.common.tools.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.*;
@@ -20,6 +23,8 @@ public class RedisClientTemplateImpl implements RedisClientTemplate {
 
     @Autowired
     private RedisDataSource redisDataSource;
+    
+    private static Logger log = LoggerFactory.getLogger(JsonUtil.class); 
 
     public void disconnect() {
         ShardedJedis shardedJedis = redisDataSource.getRedisClient();

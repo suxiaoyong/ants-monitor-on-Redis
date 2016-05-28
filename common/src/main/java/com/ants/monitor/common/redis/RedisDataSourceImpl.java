@@ -1,5 +1,6 @@
 package com.ants.monitor.common.redis;
 
+import com.ants.monitor.common.tools.JsonUtil;
 import com.ants.monitor.common.tools.SpringContextsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -17,7 +18,8 @@ import redis.clients.jedis.ShardedJedisPool;
 @Slf4j
 public class RedisDataSourceImpl implements RedisDataSource {
 
-
+	private static Logger log = LoggerFactory.getLogger(JsonUtil.class); 
+	 
     @Autowired
     private ShardedJedisPool shardedJedisPool;
 

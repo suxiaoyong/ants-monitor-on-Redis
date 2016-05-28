@@ -1,8 +1,12 @@
 package com.ants.monitor.common.tools;
 
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
-import org.codehaus.jackson.JsonNode;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.annotate.JsonMethod;
 import org.codehaus.jackson.map.DeserializationConfig;
@@ -10,13 +14,13 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.codehaus.jackson.map.type.TypeFactory;
 import org.codehaus.jackson.type.JavaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.Lists;
+
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  * success!
@@ -26,6 +30,9 @@ import java.util.Map;
 public class JsonUtil {
     private static ObjectMapper objectMapper = new ObjectMapper();
 
+
+    private static Logger log = LoggerFactory.getLogger(JsonUtil.class); 
+    
     static {
         objectMapper.setVisibility(JsonMethod.FIELD, JsonAutoDetect.Visibility.ANY);
         objectMapper.configure(SerializationConfig.Feature.INDENT_OUTPUT, true);
