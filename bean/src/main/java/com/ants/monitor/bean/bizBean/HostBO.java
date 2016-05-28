@@ -38,4 +38,46 @@ public class HostBO {
     String hostName;
     //对应的另外一个ip
     String anotherIp;
+
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+	public String getPort() {
+		return port;
+	}
+	public void setPort(String port) {
+		this.port = port;
+	}
+	public Set<String> getProviders() {
+		return providers;
+	}
+	public void setProviders(Set<String> providers) {
+		this.providers = providers;
+	}
+	public Set<String> getConsumers() {
+		return consumers;
+	}
+	public void setConsumers(Set<String> consumers) {
+		this.consumers = consumers;
+	}
+	public String getHostName() {
+		return hostName;
+	}
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+	public String getAnotherIp() {
+		return anotherIp;
+	}
+	public void setAnotherIp(String anotherIp) {
+		this.anotherIp = anotherIp;
+	}
+	public void setHostString(String hostString) {
+		this.hostString = hostString;
+	}
+    
+    
 }

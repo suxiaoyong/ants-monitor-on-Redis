@@ -1,10 +1,9 @@
 package com.ants.monitor.bean.bizBean;
 
-import lombok.AllArgsConstructor;
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.ToString;
-
-import java.io.Serializable;
 
 /**
  * Created by zxg on 15/12/9.
@@ -48,5 +47,51 @@ public class ApplicationChangeBO implements Serializable {
         }
         return host+":"+port;
     }
+	public String getHost() {
+		return host;
+	}
+	public void setHost(String host) {
+		this.host = host;
+	}
+	public String getPort() {
+		return port;
+	}
+	public void setPort(String port) {
+		this.port = port;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	public String getTime() {
+		return time;
+	}
+	public void setTime(String time) {
+		this.time = time;
+	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	public String getOrganization() {
+		return organization;
+	}
+	public void setOrganization(String organization) {
+		this.organization = organization;
+	}
+	public String getDoType() {
+		return doType;
+	}
+	public void setDoType(String doType) {
+		this.doType = doType;
+	}
+	public void setHostString(String hostString) {
+		this.hostString = hostString;
+	}
 
+    
 }
