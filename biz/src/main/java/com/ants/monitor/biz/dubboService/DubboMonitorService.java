@@ -1,5 +1,24 @@
 package com.ants.monitor.biz.dubboService;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.PostConstruct;
+
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDB.ConsistencyLevel;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.stereotype.Service;
+
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
@@ -8,19 +27,10 @@ import com.ants.monitor.bean.UUIDGenerator;
 import com.ants.monitor.bean.entity.InvokeDO;
 import com.ants.monitor.common.tools.TimeUtil;
 import com.ants.monitor.dao.redisManager.InvokeRedisManager;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Created by zxg on 15/11/2.
@@ -159,12 +169,48 @@ public class DubboMonitorService implements MonitorService {
         private InvokeDO invokeDO;
 
         private String date;
-        @Override
+        public SaveInvokeThread(InvokeDO dubboInvoke, String date) {
+			this.invokeDO=dubboInvoke;
+			this.date=date;
+		}
+		@Override
         public void run() {
             invokeRedisManager.saveInvoke(date, invokeDO);
         }
     }
 
+    
+    public void saveToInfluxDb(InvokeDO invoke){
+    	
+    	InfluxDB influxDB = InfluxDBFactory.connect("http://172.17.0.2:8086", "root", "root");
+    	String dbName = "aTimeSeries";
+    	influxDB.createDatabase(dbName);
+
+    	BatchPoints batchPoints = BatchPoints
+    	                .database(dbName)
+    	                .tag("async", "true")
+    	                .retentionPolicy("default")
+    	                .consistency(ConsistencyLevel.ALL)
+    	                .build();
+    	Point point1 = Point.measurement("cpu")
+    	                    .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+    	                    .addField("idle", 90L)
+    	                    .addField("user", 9L)
+    	                    .addField("system", 1L)
+    	                    .build();
+    	Point point2 = Point.measurement("disk")
+    	                    .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+    	                    .addField("used", 80L)
+    	                    .addField("free", 1L)
+    	                    .build();
+    	batchPoints.point(point1);
+    	batchPoints.point(point2);
+    	influxDB.write(batchPoints);
+    	Query query = new Query("SELECT idle FROM cpu", dbName);
+    	influxDB.query(query);
+    	influxDB.deleteDatabase(dbName);
+    	
+    }
 
 
     //内部线程类，开始处理url数据

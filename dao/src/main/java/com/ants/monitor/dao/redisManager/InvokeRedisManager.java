@@ -27,9 +27,13 @@ public class InvokeRedisManager {
     public void saveInvoke(String date,InvokeDO invokeDO){
         String key = String.format(RedisKeyBean.invokeListDate, date);
         String jsonString = JsonUtil.objectToJsonStr(invokeDO);
+        
 
         redisClientTemplate.rPushList(key, jsonString, RedisKeyBean.RREDIS_EXP_DAY);
     }
+    
+    
+
 
     // 获得该日期的所有invoker对象
     public List<InvokeDO> getInvokeByDate(String date){
